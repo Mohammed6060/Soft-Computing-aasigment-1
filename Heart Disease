@@ -1,0 +1,66 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns 
+import matplotlib
+
+from google.colab import drive
+drive.mount('/content/drive')
+
+heart =pd.read_csv('/content/drive/MyDrive/heart.csv')
+heart.head()
+
+heart.info()
+
+heart.describe()
+
+heart.columns
+
+heart.isnull().sum()
+
+heart=heart.drop('fbs',axis=1)
+
+sns.countplot(x='target',data=heart)
+plt.title('target = 1 or 0');
+
+sns.countplot(x='sex',hue='target',data=heart)
+plt.title('1 = positif; 0 = negatif')
+plt.xlabel('sex => 1 = male; 0 = female')
+
+from sklearn.model_selection import train_test_split 
+from sklearn import metrics
+from sklearn.metrics import accuracy_score
+
+x=heart.drop('target',axis=1)
+y=heart.target
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.20)
+
+print(x_train.shape,y_train.shape,x_test.shape,y_test.shape)
+
+from sklearn.linear_model import LogisticRegression
+
+model1 = LogisticRegression()
+
+#Fit the model
+model1.fit(x_train, y_train)
+
+y_pred1 = model1.predict(x_test)
+
+print("Accuracy --> ", model1.score(x_test, y_test)*100)
+
+from sklearn.naive_bayes import GaussianNB
+
+model2 = GaussianNB()
+
+GaussianNB()
+
+print("Accuracy --> ", model2.score(x_test, y_test)*100)
+
+y_pred2 = model2.predict(x_test)
+
+from sklearn.metrics import classification_report
+log_report=print(classification_report(y_test,y_pred1))
+
+
+nb_report=print(classification_report(y_test,y_pred2))
